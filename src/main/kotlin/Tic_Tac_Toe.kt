@@ -55,46 +55,42 @@ var count = 1
 var piece = 'X'
 var flag: Boolean = true
 fun userInput(list: MutableList<MutableList<Char>>){
-
-    while(flag != false){
-        if (count % 2 == 0){
-            piece = 'O'
-        }
-        else{
-            piece = 'X'
-        }
-        try {
-            if (count == 10 ) {
-                println("Draw")
-                break
-            }
-            val (a, b) = readln().split(" ")
-            val row = a.toInt() - 1
-            val col = b.toInt() - 1
-            if (list[row][col] != ' ') {
-                println("This cell is occupied! Choose another one!")
-                userInput(list)
-
-            }
-            else {
-
-                list[a.toInt() - 1][b.toInt() - 1] = piece
-                printBoard(list)
-                ++count
-                flag = result(list)
-            }
-        }catch (e: NumberFormatException) {
-            println("You should enter numbers!")
+    if (count % 2 == 0){
+        piece = 'O'
+    }
+    else{
+        piece = 'X'
+    }
+    try {
+        val (a, b) = readln().split(" ")
+        val row = a.toInt() - 1
+        val col = b.toInt() - 1
+        if (list[row][col] != ' ') {
+            println("This cell is occupied! Choose another one!")
             userInput(list)
-        }catch (e: IndexOutOfBoundsException) {
-            println("Coordinates should be from 1 to 3!")
-            userInput(list)
+
         }
+        else {
+            list[a.toInt() - 1][b.toInt() - 1] = piece
+            printBoard(list)
+            ++count
+            flag = result(list)
+        }
+    }catch (e: NumberFormatException) {
+        println("You should enter numbers!")
+        userInput(list)
+    }catch (e: IndexOutOfBoundsException) {
+        println("Coordinates should be from 1 to 3!")
+        userInput(list)
     }
 }
 
 fun main(){
     val board = createBoard()
     printBoard(board)
-    userInput(board)
+    do {
+        userInput(board)
+    } while(flag && count < 10)
+    if (count == 10 && flag)
+        println("Draw")
 }
